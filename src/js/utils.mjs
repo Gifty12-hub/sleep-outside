@@ -21,10 +21,25 @@ export function setClick(selector, callback) {
   });
   qs(selector).addEventListener("click", callback);
 }
-// Creating URL parameter function that will returm a parameter when requested
+
+// Creating URL parameter function that will return a parameter when requested
 export function getParam(param) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const product = urlParams.get("product")
+  return urlParams.get(param);
 }
 
+// Reusable list rendering function
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = "afterbegin",
+  clear = false
+) {
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  const htmlStrings = list.map(templateFn);
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
