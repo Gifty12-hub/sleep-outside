@@ -41,7 +41,7 @@ export default class ProductDetails {
         document.querySelector(".product-detail h2.divider").textContent = this.product.NameWithoutBrand;
         //Image
         const img = document.querySelector(".product-detail img.divider");
-        img.src = this.product.Images.PrimaryLarge;
+        img.src = this.product.Image;
         img.alt = this.product.NameWithoutBrand;
         // Color
         document.querySelector(".product__color").textContent = this.product.Colors[0].ColorName;
