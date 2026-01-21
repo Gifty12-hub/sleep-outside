@@ -2,34 +2,36 @@
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
-// or a more concise version if you are into that sort of thing:
-// export const qs = (selector, parent = document) => parent.querySelector(selector);
 
-// retrieve data from localstorage
+// retrieve data from localStorage
 export function getLocalStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }
-// save data to local storage
+
+// save data to localStorage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
+
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
-  qs(selector).addEventListener("touchend", (event) => {
+  const element = qs(selector);
+
+  element.addEventListener("touchend", (event) => {
     event.preventDefault();
     callback();
   });
-  qs(selector).addEventListener("click", callback);
+
+  element.addEventListener("click", callback);
 }
 
-// Creating URL parameter function that will return a parameter when requested
+// get URL parameter
 export function getParam(param) {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
+  const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);
 }
 
-// Reusable list rendering function
+// reusable list rendering function
 export function renderListWithTemplate(
   templateFn,
   parentElement,
@@ -40,6 +42,7 @@ export function renderListWithTemplate(
   if (clear) {
     parentElement.innerHTML = "";
   }
+
   const htmlStrings = list.map(templateFn);
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
