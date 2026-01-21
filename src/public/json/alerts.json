@@ -1,0 +1,23 @@
+[
+    {
+        "message": "This is a sample alert for sales coming in.",
+        "background": "#ffffff",
+        "color": "#000000",
+        "type": "info",
+        "duration": 5000
+    },
+    {
+        "message": "This is an alert for discounted priced goods",
+        "background": "#ff0000",
+        "color": "#ffffff",
+        "type": "warning",
+        "duration": 5000
+    },
+    {
+        "message": "Maintenance scheduled for tonight at 11 PM.",
+        "background": "#0000ff",
+        "color": "#ffff00",
+        "type": "info",
+        "duration": 7000
+    }
+]
