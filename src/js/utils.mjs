@@ -26,9 +26,11 @@ export function getParam(param) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const product = urlParams.get(param)
+  return product;
 }
 export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
-  if (clear) {  parentElement.innerHTML = "";  
+  if (clear) {
+    parentElement.innerHTML = "";
 
   }
   const htmlStrings = list.map(templateFn);
