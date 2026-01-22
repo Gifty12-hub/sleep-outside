@@ -1,52 +1,39 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-import ProductData from "./ProductData.mjs";
-import { getParam } from "./utils.mjs";
 import ProductDetails from "./ProductDetails.mjs";
+import { getParam } from "./utils.mjs";
 
-const dataSource = new ProductData("tents");
+// Universal data source that searches across all three JSON files
+class UniversalProductData {
+  async findProductById(id) {
+    const categories = ["tents", "sleeping-bags", "backpacks"];
+    for (const cat of categories) {
+      try {
+        const response = await fetch(`/json/${cat}.json`);
+        if (!response.ok) continue;
+        let data = await response.json();
+        // Normalize: backpacks/sleeping-bags have .Result array
+        const products = data.Result || data;
+        const product = products.find((item) => item.Id === id);
+        if (product) {
+          // Normalize image (backpacks use PrimaryLarge)
+          product.Image = product.Images?.PrimaryLarge || product.Images?.PrimaryMedium || product.Image || "/images/placeholder.jpg";
+          // Ensure Colors is array
+          if (!Array.isArray(product.Colors)) product.Colors = [];
+          return product;
+        }
+      } catch (err) {
+        console.error(`Error loading ${cat}.json:`, err);
+      }
+    }
+    return null; // Not found in any category
+  }
+}
 
-// Testing if the getParam function is running successfully
+const dataSource = new UniversalProductData();
 const productId = getParam("product");
 
-// to check if there is a product id in the URL
 if (productId) {
   const productDetails = new ProductDetails(productId, dataSource);
   productDetails.init();
 } else {
-  document.querySelector(".product-detail").innerHTML =
-    "<p>Product Not Found. Missing or Invalid Product found in the URL</p>"
-}
-
-function addProductToCart(product) {
-  // the error with the broken cart is here, the syntax only adds and replaces a products,
-  // but doesn't keep track of more products when added
-
-  // to fix, we'll first try to get current cart or create an empty cart array if none exists,
-  //  then push the new product to it,
-  // then save the updated cart back to local storage
-
-  let cart = getLocalStorage("so-cart") || [];
-
-  // to check if any product is already in cart
-  if (!Array.isArray(cart)) {
-    cart = [];
-  }
-
-  // Strecth and core activity: same product should increase quantity instead of adding duplicate entries
-  // find if product already exists in cart
-
-  // 1. look for existing product in cart with same id
-  const existingProduct = cart.find((item) => item.Id === product.Id);
-
-  if (existingProduct) {
-    // 2. if found, increase quantity
-    existingProduct.quantity = (existingProduct.quantity || 1) + 1;
-  } else {
-    // 3. if not found, add new product with quantity 1
-    product.quantity = 1;
-    cart.push(product);
-  }
-
-  // set the cart in the local Storage
-  setLocalStorage("so-cart", cart);
+  document.querySelector("main").innerHTML = "<h2 style='text-align:center;color:red;'>No product ID provided.</h2>";
 }
