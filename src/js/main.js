@@ -4,6 +4,14 @@ import "../css/style.css";
 import ProductData from "./ProductData.mjs";
 import ProductList from "./productList.mjs";
 import Alert from "./alerts.mjs";
+import { loadHeaderFooter } from "./utils.mjs";
+import ShoppingCart from "./shoppingcart.mjs";
+
+// Shopping Cart Initialization
+const cartData = new ProductData("/json/shopping-cart.json");
+const cartElement = document.querySelector("#shopping-cart-list");
+const shoppingCart = new ShoppingCart("shopping-cart", cartData, cartElement);
+shoppingCart.init();
 
 // to accept full path and normalize data(Result array vs direct array)
 class FixedProductData {
@@ -40,14 +48,8 @@ const packsElement = document.querySelector("#packs-list");
 const packList = new ProductList("backpacks", packsData, packsElement);
 packList.init();
 
-// //creating an instance of ProductData class
-// const dataSource = new ProductData("tents");
-
-// //creating an instance of ProductList class
-// const listElement = document.querySelector(".product-list");
-// const productList = new ProductList("tents", dataSource, listElement);
-// //initializing the product list
-// productList.init();
+// Load header and footer
+loadHeaderFooter();
 
 // creating the alert instance
 const alerts = new Alert();
