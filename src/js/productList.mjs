@@ -1,7 +1,7 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
-    const imageSrc = product.Images?.PrimaryLarge || product.Image || "";
+    const imageSrc = product.Images?.PrimaryMedium || product.Image || "";
     const productName = product.NameWithoutBrand || product.Name || "Unknown Product";
 
     return `<li class="product-card">
@@ -22,8 +22,21 @@ export default class ProductList {
         this.listElement = listElement;
     }
     async init() {
-        this.list = await this.dataSource.getData();
+        this.list = await this.dataSource.getData(this.category);
+
+        // Updating the page title
+        this.updateTitle();
         this.renderList(this.list);
+    }
+
+    updateTitle() {
+        // Find the title element and update it
+        const titleElement = document.querySelector(".title");
+        if (titleElement) {
+            // Capitalize the first letter of the category for a cleaner look
+            const categoryName = this.category.charAt(0).toUpperCase() + this.category.slice(1);
+            titleElement.innerHTML = `Top Products: ${categoryName.replace("-", " ")}`;
+        }
     }
     renderList(list) {
         //reuseable utility function

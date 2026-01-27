@@ -5,7 +5,7 @@ import ProductData from "./ProductData.mjs";
 import ProductList from "./productList.mjs";
 import Alert from "./alerts.mjs";
 import { loadHeaderFooter } from "./utils.mjs";
-import ShoppingCart from "./shoppingcart.mjs";
+import ShoppingCart from "./ShoppingCart.mjs";
 
 // Shopping Cart Initialization
 const cartData = new ProductData("/json/shopping-cart.json");

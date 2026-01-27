@@ -9,9 +9,9 @@ export default class ProductDetails {
 
     async init() {
         this.product = await this.dataSource.findProductById(this.productId);
-        this.renderProductDetails();
+        this.renderProductDetails("main");
 
-        // Add to cart listener (only if product exists)
+        // AddING cart listener (only if product exists)
         if (this.product) {
             document
                 .getElementById("addToCart")
@@ -33,38 +33,33 @@ export default class ProductDetails {
     }
 
     renderProductDetails() {
+        const detailContainer = document.querySelector(".product-detail");
+
         // Guard: product not found
         if (!this.product) {
-            document.querySelector(".product-detail").innerHTML =
+            detailContainer.innerHTML =
                 "<p style='text-align:center; color:red; font-size:1.5rem;'>Product not found.</p>";
-            document.title = "Sleep Outside | Product Not Found";
             return;
         }
 
-        // Dynamic page title
-        document.title = `${this.product.Brand?.Name || "Unknown Brand"} ${this.product.NameWithoutBrand || this.product.Name || "Product"} | Sleep Outside`;
+        // 1. Brand (the <h3>)
+        detailContainer.querySelector("h3").textContent = this.product.Brand.Name;
 
-        // Brand
-        document.querySelector(".product-detail h3").textContent = this.product.Brand?.Name || "";
+        // 2. Name (the <h2>)
+        detailContainer.querySelector("h2").textContent = this.product.NameWithoutBrand;
 
-        // Product name
-        document.querySelector(".product-detail h2.divider").textContent = this.product.NameWithoutBrand || this.product.Name || "";
+        // 3. Image (the <img>)
+        const img = detailContainer.querySelector("img");
+        img.src = this.product.Images.PrimaryLarge;
+        img.alt = this.product.Name;
 
-        // Image (normalized in data source)
-        const img = document.querySelector(".product-detail img.divider");
-        img.src = this.product.Image;
-        img.alt = this.product.NameWithoutBrand || this.product.Name || "Product image";
+        // 4. Price (the <p> with class product-card__price)
+        detailContainer.querySelector(".product-card__price").textContent = `$${this.product.FinalPrice}`;
 
-        // Color (safe access)
-        document.querySelector(".product__color").textContent =
-            this.product.Colors[0]?.ColorName || "See options";
+        // 5. Color (the <p> with class product__color)
+        detailContainer.querySelector(".product__color").textContent = this.product.Colors[0]?.ColorName || "N/A";
 
-        // Description
-        document.querySelector(".product__description").innerHTML =
-            this.product.DescriptionHtmlSimple || "No description available.";
-
-        // REMOVE the broken button line entirely (no longer needed)
-
-        // Price/discount code written by Gifty
+        // 6. Description (the <p> with class product__description)
+        detailContainer.querySelector(".product__description").innerHTML = this.product.DescriptionHtmlSimple;
     }
 }
