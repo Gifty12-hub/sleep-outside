@@ -1,6 +1,6 @@
 import "../css/style.css";
 import ProductData from "./ProductData.mjs";
-import ProductList from "./productList.mjs";
+import ProductList from "./ProductList.mjs";
 import { loadHeaderFooter, getParam, qs } from "./utils.mjs";
 
 // Load header and footer
