@@ -1,9 +1,6 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
-    const imageSrc = product.Images?.PrimaryMedium || product.Images?.PrimaryLarge || product.Image || "";
-    const productName = product.NameWithoutBrand || product.Name || "Unknown Product";
-
     return `<li class="product-card">
     <a href="/product_pages/index.html?product=${product.Id}">  <!-- Uppercase Id, leading / for consistency -->
       <img src="${product.Image}" alt="Image of ${product.Name}" />  <!-- Use "Image" -->
