@@ -271,3 +271,20 @@ footer {
   padding: 20px;
   border: 5px solid black;
 }
+
+.cart-card__remove {
+  cursor: pointer;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  font-weight: bold;
+  color: gray;
+}
+
+.cart-card__remove:hover {
+  color: red;
+}
+
+.cart-card {
+  position: relative;
+}
