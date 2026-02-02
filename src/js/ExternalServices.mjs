@@ -1,53 +1,39 @@
-// Base URL of the server API
-const baseURL = "http://server-nodejs.cit.byui.edu:3000/";
+const baseURL = import.meta.env.VITE_SERVER_URL;
 
-// Helper function to convert a fetch response to JSON
-async function convertToJson(res) {
-    const data = await res.json();  // Parse the response body as JSON
-    if (res.ok) {                   // If HTTP status is 200-299
-        return data;                // Return the parsed data
-    } else {                        // If an error occurred
-        // Throw an error object with a name and the response data as the message
-        throw { name: "servicesError", message: data };
+function convertToJson(res) {
+    if (res.ok) {
+        return res.json();
+    } else {
+        throw new Error("Bad Response");
     }
 }
 
-// Class to handle external API requests
 export default class ExternalServices {
     constructor() {
-        // No initialization needed for this class currently
+        // this.category = category;
+        // this.path = `../public/json/${this.category}.json`;
     }
-
-    // Get all products in a specific category
     async getData(category) {
-        // Fetch products by category from the API
-        const response = await fetch(baseURL + `products/search/${category}`);
-        // Convert the response to JSON and check for errors
+        const response = await fetch(`${baseURL}products/search/${category}`);
         const data = await convertToJson(response);
-        // Return only the Result property of the API response
+
+        return data.Result;
+    }
+    async findProductById(id) {
+        const response = await fetch(`${baseURL}product/${id}`);
+        const data = await convertToJson(response);
+        // console.log(data.Result);
         return data.Result;
     }
 
-    // Find a single product by its ID
-    async findProductById(id) {
-        // Fetch product details by ID
-        const response = await fetch(baseURL + `product/${id}`);
-        const data = await convertToJson(response); // Convert to JSON
-        return data.Result;                        // Return the Result property
-    }
-
-    // Send checkout data to the server
     async checkout(payload) {
-        // Options for the POST request
         const options = {
-            method: "POST",                      // HTTP method
+            method: "POST",
             headers: {
-                "Content-Type": "application/json", // Send JSON data
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(payload),       // Convert payload to JSON string
+            body: JSON.stringify(payload),
         };
-
-        // Send POST request to the checkout endpoint and convert response to JSON
-        return await fetch(baseURL + "checkout/", options).then(convertToJson);
+        return await fetch(`${baseURL}checkout/`, options).then(convertToJson);
     }
 }
