@@ -168,6 +168,35 @@ button {
   text-decoration: underline;
 }
 
+/* =========================
+   Product color swatches
+   ========================= */
+
+.product__color {
+  margin: 0.5em 0;
+}
+
+.color-swatches {
+  margin-top: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.color-swatch {
+  padding: 0.4em 0.8em;
+  background-color: var(--light-grey);
+  border: 1px solid var(--dark-grey);
+  cursor: pointer;
+  font-size: var(--small-font);
+}
+
+.color-swatch.selected {
+  background-color: var(--secondary-color);
+  color: white;
+  border: 2px solid var(--dark-grey);
+}
+
 .mission {
   padding: 0 0.5em;
   /* margin: 0.5em 0; */
