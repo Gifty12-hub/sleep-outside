@@ -288,3 +288,81 @@ footer {
 .cart-card {
   position: relative;
 }
+
+.btn-checkout {
+  display: block;
+  background-color: #303030;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  text-decoration: none;
+  margin-top: 1rem;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.btn-checkout:hover {
+  background-color: #505050;
+}
+
+/* Mobile Styles (Default) */
+#checkout-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+#checkout-form fieldset {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+
+#checkout-form label {
+  display: block;
+  margin-top: 1rem;
+}
+
+#checkout-form input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+
+/* Desktop Styles (Screens wider than 768px) */
+@media screen and (min-width: 768px) {
+  #checkout-form {
+    grid-template-columns: 2fr 1fr;
+    /* Form takes 2/3, Summary takes 1/3 */
+    align-items: start;
+  }
+
+  /* Keep the summary box visible while scrolling the long form */
+  #orderSummary {
+    position: sticky;
+    top: 20px;
+    background: #eee;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Make the fieldsets span the first column only */
+  #checkout-form fieldset {
+    grid-column: 1;
+  }
+
+  /* Make the button span the first column or fit under the summary */
+  #checkoutSubmit {
+    grid-column: 1;
+    padding: 1rem;
+    background-color: #303030;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+}
