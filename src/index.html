@@ -1,88 +1,98 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sleep Outside | Home</title>
 
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sleep Outside | Home</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="../js/main.js" type="module"></script>
+</head>
 
-
-    <!-- Load main.js to dynamically render product lists -->
-    <script type="module" src="/js/main.js"></script>
-  </head>
-
-  <body>
-    <header class="divider" id="header-divider">
-      <!-- this header is loaded from the partials directory -->
-    </header>
-
-    <main class="divider">
-      <div class="hero">
-        <img
-          src="/images/banner-sm.jpg"
-          srcset="images/banner-sm.jpg 500w, images/banner.jpg"
-          alt="image of a high mountain lake"
-        />
-        <div class="logo logo--square">
-          <img src="/images/noun_Tent_2517.svg" alt="tent image for logo" />
-          <div>Sleep<span class="highlight">Outside</span></div>
-        </div>
-        <div class="mission">
-          <p>
-            Our mission is to provide you with everything you need to sleep
-            outside comfortably at an affordable price.
-          </p>
-        </div>
+<body>
+  <header class="divider" id="main-header"></header>
+  <main class="divider">
+    <div class="hero">
+      <img src="/images/banner-sm.jpg" srcset="/images/banner-sm.jpg 500w, /images/banner.jpg"
+        alt="image of a high mountain lake" />
+      <div class="logo logo--square">
+        <img src="/images/noun_Tent_2517.svg" alt="tent image for logo" />
+        <div>Sleep<span class="highlight">Outside</span></div>
       </div>
+      <div class="mission">
+        <p>
+          Our mission is to provide you with everything you need to sleep
+          outside comfortably at an affordable price.
+        </p>
+      </div>
+    </div>
 
-      <!-- this webpage will only display the icons for each product category 
-     and redirect every click to product listing webpage-->
-
-      <section class="categories divider">
-        <h2>Shop by Product Categories</h2>
-
-        <div class="category-grid">
-          <!-- Use div, not ul -->
-
-          <a href="/product_listing/index.html?category=tents" target="_blank">
-            <img src="/images/tent.svg" alt="Tents" />
-
-            <p>Tents</p>
+    <section class="products">
+      <ul class="product-grid">
+        <li>
+          <a href="../product_listing/index.html?category=tents">
+            <img src="/images/category-tents.svg" alt="Tents" />
+            <h2>Tents</h2>
           </a>
-
-          <a
-            href="/product_listing/index.html?category=backpacks"
-            target="_blank"
-          >
-            <img src="/images/backpack.svg" alt="Backpacks" />
-
-            <p>Backpacks</p>
+        </li>
+        <li>
+          <a href="../product_listing/index.html?category=backpacks">
+            <img src="/images/category-backpacks.svg" alt="Backpacks" />
+            <h2>Backpacks</h2>
           </a>
-
-          <a
-            href="/product_listing/index.html?category=sleeping-bags"
-            target="_blank"
-          >
-            <img src="/images/sleepingbag.svg" alt="Sleeping Bags" />
-
-            <p>Sleeping Bags</p>
+        </li>
+        <li>
+          <a href="../product_listing/index.html?category=sleeping-bags">
+            <img src="/images/category-sleepingbags.svg" alt="Sleeping Bags" />
+            <h2>Sleeping Bags</h2>
           </a>
-
-          <a
-            href="/product_listing/index.html?category=hammocks"
-            target="_blank"
-          >
-            <img src="/images/hammock.svg" alt="Hammocks" />
-
-            <p>Hammocks</p>
+        </li>
+        <li>
+          <a href="../product_listing/index.html?category=hammocks">
+            <img src="/images/category-hammocks.svg" alt="Hammocks" />
+            <h2>Hammocks</h2>
           </a>
-        </div>
-      </section>
-    </main>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <footer id="main-footer"></footer>
 
-    <footer id="footer-divider">
-      <!-- this footer is dynamically loaded in the partials directory -->
-    </footer>
-  </body>
+  <!-- Live reload script -->
+  <script>
+    if ('WebSocket' in window) {
+      (function () {
+        function refreshCSS() {
+          var sheets = [].slice.call(document.getElementsByTagName("link"));
+          var head = document.getElementsByTagName("head")[0];
+          for (var i = 0; i < sheets.length; ++i) {
+            var elem = sheets[i];
+            var parent = elem.parentElement || head;
+            parent.removeChild(elem);
+            var rel = elem.rel;
+            if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+              var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+              elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+            }
+            parent.appendChild(elem);
+          }
+        }
+        var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+        var address = protocol + window.location.host + window.location.pathname + '/ws';
+        var socket = new WebSocket(address);
+        socket.onmessage = function (msg) {
+          if (msg.data == 'reload') window.location.reload();
+          else if (msg.data == 'refreshcss') refreshCSS();
+        };
+        if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+          console.log('Live reload enabled.');
+          sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+        }
+      })();
+    } else {
+      console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+    }
+  </script>
+</body>
+
 </html>
