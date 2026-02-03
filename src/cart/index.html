@@ -15,13 +15,25 @@
   <main class="divider">
     <section class="products">
       <h2>My Cart</h2>
-      <ul class="product-list"></ul>
-      <div class="list-footer hide">
-        <a href="/checkout/">Checkout</a>
-        <span>Total:</span>
-        <span class="list-total">Total: </span>
-      </div>
+
+      <!-- Example cart item template (will be rendered dynamically by JS) -->
+      <li class="cart-item" data-id="PRODUCT_ID">
+        <img src="PRODUCT_IMAGE" alt="PRODUCT_NAME" />
+        <div class="cart-item-info">
+          <h4>PRODUCT_NAME</h4>
+          <p>Color: PRODUCT_COLOR</p>
+          <p>Unit Price: €PRODUCT_PRICE</p>
+
+          <div class="cart-item-quantity">
+            <input type="number" class="quantity-input" value="1" min="1" />
+          </div>
+
+          <p>Total: <span class="item-total">€PRODUCT_TOTAL</span></p>
+        </div>
+      </li>
+
     </section>
+    <p class="list-total">Total: €0.00</p>
   </main>
 
   <footer id="main-footer"></footer>
