@@ -341,7 +341,7 @@ footer {
     align-items: start;
   }
 
-  /* Keep the summary box visible while scrolling the long form */
+  /* Keeping the summary box visible while scrolling the long form */
   #orderSummary {
     position: sticky;
     top: 20px;
@@ -351,12 +351,12 @@ footer {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
-  /* Make the fieldsets span the first column only */
+  /* Making the fieldsets span the first column only */
   #checkout-form fieldset {
     grid-column: 1;
   }
 
-  /* Make the button span the first column or fit under the summary */
+  /* Making the button span the first column or fit under the summary */
   #checkoutSubmit {
     grid-column: 1;
     padding: 1rem;
@@ -365,4 +365,25 @@ footer {
     font-size: 1.2rem;
     cursor: pointer;
   }
+}
+
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8d7da;
+  /* Light Red */
+  color: #721c24;
+  /* Dark Red Text */
+  border: 1px solid #f5c6cb;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.alert span {
+  cursor: pointer;
+  padding: 0 10px;
+  font-size: 1.2rem;
 }

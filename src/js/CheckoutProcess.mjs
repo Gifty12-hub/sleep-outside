@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
@@ -72,24 +72,41 @@ export default class CheckoutProcess {
         totalE.innerText = `$${this.orderTotal.toFixed(2)}`;
     }
 
+
     async checkout() {
         const formElement = document.forms["checkout"];
         const json = formDataToJSON(formElement);
 
-        // The server expects these specific keys and formats
         json.orderDate = new Date().toISOString();
         json.orderTotal = this.orderTotal.toFixed(2);
         json.tax = this.tax.toFixed(2);
         json.shipping = this.shipping;
-        json.items = packageItems(this.list); // Ensure this function maps your cart items correctly
-
-        console.log("Payload to verify:", json);
+        json.items = packageItems(this.list);
 
         try {
             const res = await services.checkout(json);
             console.log("Success response:", res);
+
+            // 1. Clear the cart from local storage
+            localStorage.removeItem(this.key);
+
+            // 2. Redirect the user to the success page
+            location.assign("success.html");
+
         } catch (err) {
+            // 3. Clear any existing alerts so they don't stack up
+            const existingAlerts = document.querySelectorAll(".alert");
+            existingAlerts.forEach((alert) => alert.remove());
+
+            // 4. Loop through the error object and display each message
+            // Note: The server returns errors as an object like { "message": "error here" }
+            for (let message in err.message) {
+                alertMessage(err.message[message]);
+            }
             console.log("Checkout Error:", err);
         }
     }
+    
+
+
     }
