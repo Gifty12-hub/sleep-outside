@@ -1,28 +1,27 @@
-import { getLocalStorage } from "./utils.mjs";
+import { loadHeaderFooter } from "./utils.mjs";
+import ShoppingCart from "./ShoppingCart.mjs";
 
-function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
+async function initCartPage() {
+  try {
+    // Load shared header & footer first
+    await loadHeaderFooter();
+
+    // Get the container where products should be rendered
+    const listElement = document.querySelector(".product-list");
+
+    if (!listElement) {
+      console.error("Cart product list container (.product-list) not found");
+      return;
+    }
+    // Initialize the cart
+    const cart = new ShoppingCart("so-cart", listElement);
+    await cart.init();
+
+    console.log("Cart page initialized");
+  } catch (error) {
+    console.error("Failed to initialize cart page:", error);
+  }
 }
 
-function cartItemTemplate(item) {
-  const newItem = `<li class="cart-card divider">
-  <a href="#" class="cart-card__image">
-    <img
-      src="${item.Image}"
-      alt="${item.Name}"
-    />
-  </a>
-  <a href="#">
-    <h2 class="card__name">${item.Name}</h2>
-  </a>
-  <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-  <p class="cart-card__quantity">qty: 1</p>
-  <p class="cart-card__price">$${item.FinalPrice}</p>
-</li>`;
-
-  return newItem;
-}
-
-renderCartContents();
+// Run when the page is ready
+initCartPage();
