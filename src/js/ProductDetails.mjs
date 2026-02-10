@@ -21,9 +21,31 @@ export default class ProductDetails {
     }
 
     addProductToCart() {
-        const cartItems = getLocalStorage("so-cart") || [];
-        cartItems.push(this.product);
+        let cartItems = getLocalStorage("so-cart") || [];
+
+        const existingIndex = cartItems.findIndex(item => item.Id === this.product.Id);
+
+        if (existingIndex !== -1) {
+            // Already in cart → increment quantity
+            cartItems[existingIndex].quantity = (cartItems[existingIndex].quantity || 1) + 1;
+        } else {
+            // New item
+            cartItems.push({ ...this.product, quantity: 1 });
+        }
+
         setLocalStorage("so-cart", cartItems);
+
+        // Optional feedback
+        const btn = document.getElementById("add-to-cart");
+        const original = btn.textContent;
+        btn.textContent = "Added ✓";
+        btn.disabled = true;
+        setTimeout(() => {
+            btn.textContent = original;
+            btn.disabled = false;
+        }, 1200);
+
+        window.location.href = "../cart/index.html";
     }
 
     renderProductDetails() {
@@ -32,20 +54,19 @@ export default class ProductDetails {
 }
 
 function productDetailsTemplate(product) {
-    document.querySelector("h2").textContent = product.Category.charAt(0).toUpperCase() + product.Category.slice(1);
-    document.querySelector("#p-brand").textContent = product.Brand.Name;
-    document.querySelector("#p-name").textContent = product.NameWithoutBrand;
+    document.querySelector("h2").textContent = (product.Category?.charAt(0).toUpperCase() + product.Category?.slice(1)) || 'Product Details';
+    document.querySelector("#p-brand").textContent = product.Brand?.Name || 'Unknown Brand';
+    document.querySelector("#p-name").textContent = product.NameWithoutBrand || product.Name;
 
     const productImage = document.querySelector("#p-image");
-    productImage.src = product.Images.PrimaryExtraLarge;
-    productImage.alt = product.NameWithoutBrand;
-    const euroPrice = new Intl.NumberFormat('de-DE',
-        {
-            style: 'currency', currency: 'EUR',
-        }).format(Number(product.FinalPrice) * 0.85);
-    document.querySelector("#p-price").textContent = `${euroPrice}`;
-    document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
-    document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
+    productImage.src = product.Images?.PrimaryLarge || '';
+    productImage.alt = product.NameWithoutBrand || product.Name;
+    document.querySelector("#p-price").textContent = new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: 'USD',
+    }).format(Number(product.FinalPrice) || 0);
+
+    document.querySelector("#p-color").textContent = product.Colors?.[0]?.ColorName || 'N/A';
+    document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple || 'No description available';
 
     document.querySelector("#add-to-cart").dataset.id = product.Id;
 }

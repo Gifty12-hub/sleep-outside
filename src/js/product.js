@@ -4,8 +4,13 @@ import ProductDetails from "./ProductDetails.mjs";
 
 loadHeaderFooter();
 
-const dataSource = new ExternalServices("tents");
+const dataSource = new ExternalServices();
 const productID = getParam("product");
 
-const product = new ProductDetails(productID, dataSource);
-product.init();
+if (productID) {
+  const product = new ProductDetails(productID, dataSource);
+  product.init();
+} else {
+  // Optionally, show error message in UI
+  console.error("No product ID found in URL");
+}

@@ -3,10 +3,10 @@ import { renderListWithTemplate } from "./utils.mjs";
 function productCardTemplate(product) {
     return `<li class="product-card">
     <a href="/product_pages/index.html?product=${product.Id}">  <!-- Uppercase Id, leading / for consistency -->
-      <img src="${product.Image}" alt="Image of ${product.Name}" />  <!-- Use "Image" -->
-      <h2 class="card__brand">${product.Brand.Name}</h2>
-      <h3 class="card__name">${product.NameWithoutBrand}</h3>
-      <p class="product-card__price">$${product.FinalPrice}</p>
+      <img src="${product.Images?.PrimaryMedium || ''}" alt="Image of ${product.Name}" />  <!-- Fixed to Images.PrimaryMedium -->
+      <h2 class="card__brand">${product.Brand?.Name || 'Unknown'}</h2>
+      <h3 class="card__name">${product.NameWithoutBrand || product.Name}</h3>
+      <p class="product-card__price">$${product.FinalPrice?.toFixed(2) || 'N/A'}</p>
     </a>
   </li>`;
 }
@@ -19,7 +19,7 @@ export default class ProductList {
         this.listElement = listElement;
     }
     async init() {
-        this.list = await this.dataSource.getData();
+        this.list = await this.dataSource.getData(this.category); // Added this.category
         this.renderList(this.list);
     }
     renderList(list) {
