@@ -21,11 +21,30 @@ export default class ProductDetails {
     }
 
     addProductToCart() {
-        const cartItems = getLocalStorage("so-cart") || [];
-        cartItems.push(this.product);
+        let cartItems = getLocalStorage("so-cart") || [];
+
+        const existingIndex = cartItems.findIndex(item => item.Id === this.product.Id);
+
+        if (existingIndex !== -1) {
+            // Already in cart → increment quantity
+            cartItems[existingIndex].quantity = (cartItems[existingIndex].quantity || 1) + 1;
+        } else {
+            // New item
+            cartItems.push({ ...this.product, quantity: 1 });
+        }
+
         setLocalStorage("so-cart", cartItems);
 
-        // redirect to the cart page after adding the item to the cart
+        // Optional feedback
+        const btn = document.getElementById("add-to-cart");
+        const original = btn.textContent;
+        btn.textContent = "Added ✓";
+        btn.disabled = true;
+        setTimeout(() => {
+            btn.textContent = original;
+            btn.disabled = false;
+        }, 1200);
+
         window.location.href = "../cart/index.html";
     }
 
